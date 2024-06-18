@@ -33,7 +33,7 @@
 ### Association
 
 - belongs_to :user
-- has_many :purchases 
+- has_one :purchases 
 - has_many :comments 
 
 ## commentsテーブル
@@ -60,7 +60,7 @@
 ### Association
 - belongs_to :user
 - belongs_to :item
-- has_one :ship
+- has_many :ship
 
 ## shipsテーブル
 | Column             | Type   | Options     |
