@@ -48,12 +48,12 @@
 ## shipsテーブル
 | Column             | Type    | Options     |
 | ------------------ | ------- | ----------- |
-| post_code          | strings | null: false |
-| prefecture         | integer | null: false |
-| municipality       | strings | null: false |
-| street_address     | strings | null: false |
-| build_name         | strings |             |
-| phone_num          | strings | null: false |
+| post_code          | string  | null: false |
+| region_id          | integer | null: false |
+| municipality       | string  | null: false |
+| street_address     | string  | null: false |
+| build_name         | string  |             |
+| phone_num          | string  | null: false |
 | order              | references | null: false, foreign_key: true |
 
 ### Association
