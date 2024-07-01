@@ -1,7 +1,8 @@
 class ItemsController < ApplicationController
+
+  before_action :authenticate_user!, only: [:new, :create]
+
   def index
-  #  @items = Item.all
-  #  @items = Iten.order("create_at DESC")
   end
 
   def new
@@ -13,8 +14,7 @@ class ItemsController < ApplicationController
     if @item.save
      redirect_to root_path
     else
-      binding.pry
-      render :new, status: :unprocessable_entity
+     render :new, status: :unprocessable_entity
     end
   end
 
