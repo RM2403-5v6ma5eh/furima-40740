@@ -11,9 +11,6 @@ window.addEventListener('turbo:load', () => {
           const addProfitDom = document.getElementById("profit");
           let profitRate = 1 - taxRate;
           addProfitDom.innerHTML = Math.floor(inputValue * profitRate)
-
         });
-      } else {
-        console.log("Price input element not found.")
       }
 });
