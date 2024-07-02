@@ -67,6 +67,16 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include "Price must be less than or equal to 9999999"
       end
+      it 'prise の値に、全角文字が使われているときには登録できない' do
+        @item.price = '金額'  # price の値に、全角文字が使われている
+        @item.valid?
+        expect(@item.errors.full_messages).to include "Price is not a number"
+      end
+      it 'userが紐づいていないと登録できない' do
+        @item.user = nil  # userが紐づいていないと登録できない
+        @item.valid?
+        expect(@item.errors.full_messages).to include "User must exist"
+      end
     end
   end
 end
