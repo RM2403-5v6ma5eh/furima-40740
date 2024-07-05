@@ -19,6 +19,11 @@ class ItemsController < ApplicationController
     end
   end
 
+  def show
+    @item = Item.find(params[:id])
+    @user = current_user if user_signed_in?
+  end
+
   private
 
   def item_params
