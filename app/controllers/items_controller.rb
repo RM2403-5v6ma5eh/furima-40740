@@ -24,6 +24,10 @@ class ItemsController < ApplicationController
     @user = current_user if user_signed_in?
   end
 
+  def edit
+    @item = Item.find(params[:id])
+  end
+
   private
 
   def item_params
