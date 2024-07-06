@@ -1,6 +1,8 @@
 class ItemsController < ApplicationController
 
-  before_action :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_action :correct_user, only: [:edit, :update]
+  before_action :set_item, only: [:show, :edit, :update]
 
   def index
     @items = Item.order(created_at: :desc)
@@ -20,11 +22,26 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find(params[:id])
     @user = current_user if user_signed_in?
   end
 
+  def edit
+  end
+
+  def update
+    if @item.update(item_params)
+      redirect_to @item, notice:
+    else
+      render :edit, status: :unprocessable_entity
+     end  
+  end 
+
+
   private
+
+  def set_item
+    @item = Item.find(params[:id])
+  end
 
   def item_params
     params.require(:item).permit(
@@ -38,6 +55,11 @@ class ItemsController < ApplicationController
         :region_id, 
         :days_until_delivery_id
       ).merge(user_id: current_user.id)
+  end
+
+  def correct_user
+    @item = current_user.items.find_by(id: params[:id])
+    redirect_to items_path, notice: "Not authorized to edit this item" if @item.nil?
   end
 
 end
