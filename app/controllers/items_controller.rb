@@ -23,6 +23,7 @@ class ItemsController < ApplicationController
 
   def show
     @user = current_user if user_signed_in?
+    redirect_to orders_path(item_id: @item.id)
   end
 
   def edit
