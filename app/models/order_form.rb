@@ -1,7 +1,8 @@
 class OrderForm 
   include ActiveModel::Model
-  attr_accessor  :item_id, :post_code, :region_id, :municipality, :street_address, :build_name, :phone_num, :order
-  attr_reader :user_id   
+  attr_accessor  :post_code, :region_id, :municipality, :street_address, :build_name, :phone_num
+  attr_accessor  :item_id, :user_id 
+  attr_accessor  :token 
 
   validates :post_code,        presence: true, format: {with: /\A[0-9]{3}-[0-9]{4}\z/, message: "is invalid. Include hyphen(-)"}
   validates :region_id,        numericality: { other_than: 1 , message: "can't be blank"} 
@@ -22,13 +23,19 @@ class OrderForm
         street_address: street_address,
         build_name:     build_name,
         phone_num:      phone_num,
-        order_id:       order_id
       )
 
       order = Order.create!(
         item_id:    item_id,
-        user_id:    user_id
+        user_id:    current_user.id
       )
+
+      order.ship = ship 
     end
+
+    true
+  rescue ActiveRecord::RecordInvalid => e 
+    errors.add(:base, "Failed to save: #{e.message}")
+    false
   end
 end
