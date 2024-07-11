@@ -3,7 +3,8 @@ const pay = () => {
   const numberForm = document.getElementById("number-form");
 
   if (numberForm) {
-    const payjp = Payjp('pk_test_cf9fa7729f30a1f43d6b7751')  // PAY.JPテスト公開鍵
+    const publicKey = gon.public_key
+    const payjp = Payjp(publicKey) // PAY.JPテスト公開鍵
     const elements = payjp.elements();
     const numberElement = elements.create('cardNumber');
     const expiryElement = elements.create('cardExpiry');
@@ -19,7 +20,7 @@ const pay = () => {
         if (response.error) {
         } else {
           const token = response.id;
-          
+
           const hiddenInput = document.createElement('input');
           hiddenInput.setAttribute('type', 'hidden');
           hiddenInput.setAttribute('name', 'payjp_token');
@@ -41,3 +42,4 @@ const pay = () => {
 };
 
 window.addEventListener("turbo:load", pay);
+window.addEventListener("turbo:render", pay);
