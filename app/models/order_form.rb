@@ -4,15 +4,15 @@ class OrderForm
   attr_accessor  :item_id, :user_id 
   attr_accessor  :token 
 
-  validates :post_code,        presence: true, format: {with: /\A[0-9]{3}-[0-9]{4}\z/, message: "is invalid. Include hyphen(-)"}
+  validates :token,            presence: true
+  validates :post_code,        presence: true, format: {with: /\A[0-9]{3}-[0-9]{4}\z/, message: "is invalid. Enter it as follows (e.g. 123-4567)"}
   validates :region_id,        numericality: { other_than: 1 , message: "can't be blank"} 
   validates :municipality,     presence: true
   validates :street_address,   presence: true
-  validates :phone_num,        presence: true,  format: { with: /\A\d{10,11}\z/, message: "must be a valid phone number" }
+  validate :validate_phone_num
 
   validates :item_id,          presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :user_id,          presence: true
-  validates :token,            presence: true
 
   def save
     return false unless valid?
@@ -41,4 +41,19 @@ class OrderForm
     Rails.logger.error("Failed to save order or ship: #{e.message}")
     false
   end
+
+  private
+
+  def validate_phone_num
+    if phone_num.blank?
+      errors.add(:phone_num, "can't be blank")
+    end
+    if phone_num.length < 10
+      errors.add(:phone_num, "is too short")
+    end
+    if phone_num !~ /\A\d{10,11}\z/
+      errors.add(:phone_num, "is invalid. Input only number")
+    end
+  end
+
 end

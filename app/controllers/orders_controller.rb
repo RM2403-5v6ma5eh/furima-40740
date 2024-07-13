@@ -1,30 +1,27 @@
 class OrdersController < ApplicationController
 
+  before_action :authenticate_user!, only: [:index, :create ]
+  before_action :set_item, only: [:index, :create]
+  before_action :check_item_sold_out, only: [:index, :create]
+
   def index
     gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
-    @item = Item.find(params[:item_id])
     @order_form = OrderForm.new
   end
 
   def create
-    @item = Item.find(params[:item_id])   
     @order_form = OrderForm.new(order_form_params.merge(token: params[:payjp_token]))
     @order_form.user_id = current_user.id 
-    binding.pry
     if @order_form.valid?
       pay_item      
-      binding.pry
       if  @order_form.save
-        binding.pry 
         redirect_to root_path, notice: 'Order was successfully created.'
       else
-        binding.pry
         gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
         @item = Item.find(params[:item_id])   
         render :index, status: :unprocessable_entity
       end 
     else
-      binding.pry
       gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
       @item = Item.find(params[:item_id])   
       render :index, status: :unprocessable_entity
@@ -32,6 +29,16 @@ class OrdersController < ApplicationController
   end
 
   private
+
+  def set_item
+    @item = Item.find(params[:item_id])
+  end
+
+  def check_item_sold_out
+    if @item.order.present?
+      redirect_to root_path, alert: 'この商品は既に販売されています。'
+    end
+  end
 
   def order_form_params
     params.require(:order_form)
@@ -46,4 +53,5 @@ class OrdersController < ApplicationController
       currency: 'jpy'               
     )
   end
+
 end
