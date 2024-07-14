@@ -9,6 +9,7 @@ class Item < ApplicationRecord
   belongs_to_active_hash :burden
   belongs_to_active_hash :region
   belongs_to_active_hash :days_until_delivery 
+  has_one :order 
 
   validate :image_presence
 
