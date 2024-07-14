@@ -4,15 +4,26 @@ class OrderForm
   attr_accessor  :item_id, :user_id 
   attr_accessor  :token 
 
-  validates :token,            presence: true
-  validates :post_code,        presence: true, format: {with: /\A[0-9]{3}-[0-9]{4}\z/, message: "is invalid. Enter it as follows (e.g. 123-4567)"}
-  validates :region_id,        numericality: { other_than: 1 , message: "can't be blank"} 
-  validates :municipality,     presence: true
-  validates :street_address,   presence: true
-  validate :validate_phone_num
 
-  validates :item_id,          presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validates :user_id,          presence: true
+  with_options presence: true do
+    validates :token            
+    validates :post_code,        format: {with: /\A[0-9]{3}-[0-9]{4}\z/, message: "is invalid. Enter it as follows (e.g. 123-4567)"}
+    validates :municipality     
+    validates :street_address 
+
+    validates :item_id,          numericality: { only_integer: true, greater_than: 0 }
+    validates :user_id         
+  end
+  
+  #validates :token,            presence: true
+  #validates :post_code,        presence: true, format: {with: /\A[0-9]{3}-[0-9]{4}\z/, message: "is invalid. Enter it as follows (e.g. 123-4567)"}
+   validates :region_id,        numericality: { other_than: 1 , message: "can't be blank"} 
+  #validates :municipality,     presence: true
+  #validates :street_address,   presence: true
+   validate :validate_phone_num
+
+  #validates :item_id,          presence: true, numericality: { only_integer: true, greater_than: 0 }
+  #validates :user_id,          presence: true
 
   def save
     return false unless valid?
@@ -51,6 +62,7 @@ class OrderForm
     if phone_num.length < 10
       errors.add(:phone_num, "is too short")
     end
+
     if phone_num !~ /\A\d{10,11}\z/
       errors.add(:phone_num, "is invalid. Input only number")
     end

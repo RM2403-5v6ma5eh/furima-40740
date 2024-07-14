@@ -18,12 +18,10 @@ class OrdersController < ApplicationController
         redirect_to root_path, notice: 'Order was successfully created.'
       else
         gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
-        @item = Item.find(params[:item_id])   
         render :index, status: :unprocessable_entity
       end 
     else
       gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
-      @item = Item.find(params[:item_id])   
       render :index, status: :unprocessable_entity
     end
   end
@@ -35,7 +33,7 @@ class OrdersController < ApplicationController
   end
 
   def check_item_sold_out
-    if @item.order.present?
+    if (@item.order.present?) || (@item.user_id  == current_user.id)
       redirect_to root_path, alert: 'この商品は既に販売されています。'
     end
   end
