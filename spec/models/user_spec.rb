@@ -37,19 +37,19 @@ RSpec.describe User, type: :model do
         @user.password = 'aaaaaa'  # passwordの値を英字のみ文字にする
         @user.password_confirmation = 'aaaaaa' 
         @user.valid?
-        expect(@user.errors.full_messages).to include "Password is invalid. Include both letters and numbers"
+        expect(@user.errors.full_messages).to include "Password is invalid. Include both letters and numbers."
       end
       it 'passwordが数字のみでは登録できない' do
         @user.password = '000000'  # passwordの値を数字のみ文字にする
         @user.password_confirmation = '000000' 
         @user.valid?
-        expect(@user.errors.full_messages).to include "Password is invalid. Include both letters and numbers"
+        expect(@user.errors.full_messages).to include "Password is invalid. Include both letters and numbers."
       end   
       it 'passwordが英数字以外では登録できない' do
         @user.password = 'ああああああ'  # passwordの値を英数字以外の文字にする
         @user.password_confirmation = 'ああああああ' 
         @user.valid?
-        expect(@user.errors.full_messages).to include "Password is invalid. Include both letters and numbers"
+        expect(@user.errors.full_messages).to include "Password is invalid. Include both letters and numbers."
       end 
       it 'password_confirmationが空では登録できない' do
         @user.password_confirmation = ''  # password_confirmation の値を空にする
