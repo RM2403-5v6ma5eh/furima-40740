@@ -1,5 +1,5 @@
 class CreateShips < ActiveRecord::Migration[7.0]
-  def changestreet_address
+  def change
     create_table :ships do |t|
       t.string     :post_code,              null:  false
       t.integer    :region_id,              null:  false     
@@ -12,5 +12,3 @@ class CreateShips < ActiveRecord::Migration[7.0]
     end
   end
 end
-
-
