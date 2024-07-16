@@ -17,8 +17,12 @@ class User < ApplicationRecord
   has_many :orders
 
   def password_complexity
-    if password.present? && !password.match(/^(?=.*[a-zA-Z])(?=.*\d).{8,}$/)
-      errors.add :password, 'is invalid. Include both letters and numbers.'
+    if password.present?
+      unless password.match(/^(?=.*[a-zA-Z])(?=.*\d).+$/)
+        unless errors[:password].include?('is invalid. Include both letters and numbers.')
+          errors.add :password, 'is invalid. Include both letters and numbers.'
+        end
+      end
     end
   end
 
